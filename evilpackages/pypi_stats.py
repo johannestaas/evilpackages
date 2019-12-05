@@ -8,7 +8,6 @@ import grequests
 import requests
 from bs4 import BeautifulSoup
 
-
 logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger('evilpackages')
 

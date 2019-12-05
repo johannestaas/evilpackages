@@ -42,6 +42,7 @@ setup(
         'requests',
         'grequests',
         'beautifulsoup4',
+        'python-Levenshtein',
     ],
     entry_points={
         'console_scripts': [
