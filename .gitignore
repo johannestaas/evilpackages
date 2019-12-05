@@ -1,0 +1,10 @@
+syntax: glob
+*.pyc
+*.log
+build/*
+evilpackages.egg-info/*
+dist/*
+evilpackages.egg*
+.tox/*
+.cache/*
+.ropeproject/*

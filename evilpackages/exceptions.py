@@ -1,0 +1,2 @@
+class EvilError(ValueError):
+    pass
