@@ -13,6 +13,7 @@ def compare_package_names(
     recent='last_month',
     max_dist=2,
     min_downloads=10000,
+    min_name_len=5,
 ):
     packages = [
         key for key in src_stats
@@ -25,6 +26,8 @@ def compare_package_names(
     possible_evil = defaultdict(list)
     for pkg in packages:
         if stats[pkg] < min_downloads:
+            continue
+        if len(pkg) < min_name_len:
             continue
         for evil in packages:
             if evil == pkg:
@@ -60,6 +63,8 @@ def save_diff(
     recent='last_month',
     max_dist=2,
     min_downloads=10000,
+    min_name_len=5,
+    **kwargs
 ):
     with open(stats_path) as f:
         src_stats = json.load(f)
@@ -68,6 +73,7 @@ def save_diff(
         recent=recent,
         max_dist=max_dist,
         min_downloads=min_downloads,
+        min_name_len=min_name_len,
     )
     LOG.info('top 10:')
     for result in results[:10]:

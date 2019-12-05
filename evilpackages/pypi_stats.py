@@ -94,7 +94,7 @@ def get_all_download_stats(batch_size=100):
     return stats
 
 
-def save_download_stats(path='stats.json', batch_size=100):
+def save_download_stats(path='stats.json', batch_size=100, **kwargs):
     stats = get_all_download_stats(batch_size=batch_size)
     with open(path, 'w') as f:
         json.dump(stats, f, indent=4)

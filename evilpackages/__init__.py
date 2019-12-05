@@ -24,7 +24,7 @@ def main():
         help='download stats for all packages',
     )
     subparser.add_argument(
-        '--out', '-o', dest='output', default='stats.json',
+        '--out', '-o', dest='path', default='stats.json',
         help='output path, default: %(default)s',
     )
     subparser.add_argument(
@@ -36,15 +36,16 @@ def main():
         help='diff the downloaded stats',
     )
     subparser.add_argument(
-        '--in', '-i', dest='input', default='stats.json',
+        '--in', '-i', dest='stats_path', default='stats.json',
         help='input path, default: %(default)s',
     )
     subparser.add_argument(
-        '--out', '-o', dest='output', default='diff.json',
+        '--out', '-o', dest='output_path', default='diff.json',
         help='output path, default: %(default)s',
     )
     subparser.add_argument(
-        '--recent', '-r', choices=('month', 'week', 'day'), default='month',
+        '--recent', '-r',
+        choices=('last_month', 'last_week', 'last_day'), default='last_month',
         help='download stats by month/week/day, default: %(default)s',
     )
     subparser.add_argument(
@@ -55,17 +56,16 @@ def main():
         '--min-downloads', '-m', type=int, default=10000,
         help='minimum downloads of source package, default: %(default)s',
     )
+    subparser.add_argument(
+        '--min-name-len', '-n', type=int, default=5,
+        help='minimum source package name length, default: %(default)s',
+    )
     args = parser.parse_args()
 
+    kwargs = vars(args)
     if args.cmd == 'stats':
-        save_download_stats(path=args.output, batch_size=args.batch_size)
+        save_download_stats(**kwargs)
     elif args.cmd == 'diff':
-        save_diff(
-            stats_path=args.input,
-            output_path=args.output,
-            recent=f'last_{args.recent}',
-            max_dist=args.max_dist,
-            min_downloads=args.min_downloads,
-        )
+        save_diff(**kwargs)
     else:
         parser.print_usage()
