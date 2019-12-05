@@ -58,7 +58,7 @@ def get_recent_downloads_for_batch(packages):
     return data
 
 
-def batch_list(lst, size=100):
+def batch_list(lst, size=1000):
     batch = []
     for item in lst:
         batch.append(item)
@@ -69,7 +69,7 @@ def batch_list(lst, size=100):
         yield batch
 
 
-def get_all_download_stats():
+def get_all_download_stats(batch_size=1000):
     packages = get_package_list()
     stats = {}
     total = len(packages)
@@ -77,7 +77,7 @@ def get_all_download_stats():
     remaining = total
     timing_per_package = None
     try:
-        for batch in batch_list(packages):
+        for batch in batch_list(packages, size=batch_size):
             start = timeit.default_timer()
             msg = f'{handled}/{total} ({handled / total:.2%})'
             if timing_per_package is not None:
@@ -95,8 +95,8 @@ def get_all_download_stats():
     return stats
 
 
-def save_download_stats(path='stats.json'):
-    stats = get_all_download_stats()
+def save_download_stats(path='stats.json', batch_size=1000):
+    stats = get_all_download_stats(batch_size=batch_size)
     with open(path, 'w') as f:
         json.dump(stats, f, indent=4)
     LOG.info(f'dumped to {path}')

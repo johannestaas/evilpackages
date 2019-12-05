@@ -26,9 +26,15 @@ def main():
         '--out', '-o', default='stats.json',
         help='output path, default: %(default)s',
     )
+    subparser.add_argument(
+        '--batch-size', '-b', type=int, default=1000,
+        help='number of concurrent requests, default: %(default)s',
+    )
     args = parser.parse_args()
 
     if args.cmd == 'stats':
-        save_download_stats(path=args.out)
+        save_download_stats(path=args.out, batch_size=args.batch_size)
+    elif args.cmd == 'diff':
+        raise NotImplementedError('todo')
     else:
         parser.print_usage()
