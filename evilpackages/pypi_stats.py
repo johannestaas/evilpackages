@@ -1,13 +1,15 @@
 import re
 import json
 import logging
+import timeit
+from datetime import timedelta
 
 import grequests
 import requests
 from bs4 import BeautifulSoup
 
 
-logging.basicConfig(level=logging.INFO, filename='evilpackages.log')
+logging.basicConfig(level=logging.INFO)
 LOG = logging.getLogger('evilpackages')
 
 RE_PACKAGE_NAME = re.compile(r'/simple/([^/]+)')
@@ -72,19 +74,29 @@ def get_all_download_stats():
     stats = {}
     total = len(packages)
     handled = 0
+    remaining = total
+    timing_per_package = None
     try:
         for batch in batch_list(packages):
-            LOG.info(f'{handled}/{total} ({handled / total:.2%})')
+            start = timeit.default_timer()
+            msg = f'{handled}/{total} ({handled / total:.2%})'
+            if timing_per_package is not None:
+                remaining_s = timedelta(seconds=timing_per_package * remaining)
+                msg = f'{msg} remaining: {remaining_s}'
+            LOG.info(msg)
             download_stats = get_recent_downloads_for_batch(batch)
             stats.update(download_stats)
+            remaining -= len(batch)
             handled += len(batch)
+            stop = timeit.default_timer()
+            timing_per_package = (stop - start) / len(batch)
     except KeyboardInterrupt:
         LOG.debug(f'stats: {stats!r}')
     return stats
 
 
-def save_download_stats():
+def save_download_stats(path='stats.json'):
     stats = get_all_download_stats()
-    with open('stats.json', 'w') as f:
+    with open(path, 'w') as f:
         json.dump(stats, f, indent=4)
-    LOG.info('dumped to stats.json')
+    LOG.info(f'dumped to {path}')
