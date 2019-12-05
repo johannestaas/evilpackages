@@ -58,7 +58,7 @@ def get_recent_downloads_for_batch(packages):
     return data
 
 
-def batch_list(lst, size=1000):
+def batch_list(lst, size=100):
     batch = []
     for item in lst:
         batch.append(item)
@@ -69,7 +69,7 @@ def batch_list(lst, size=1000):
         yield batch
 
 
-def get_all_download_stats(batch_size=1000):
+def get_all_download_stats(batch_size=100):
     packages = get_package_list()
     stats = {}
     total = len(packages)
@@ -95,7 +95,7 @@ def get_all_download_stats(batch_size=1000):
     return stats
 
 
-def save_download_stats(path='stats.json', batch_size=1000):
+def save_download_stats(path='stats.json', batch_size=100):
     stats = get_all_download_stats(batch_size=batch_size)
     with open(path, 'w') as f:
         json.dump(stats, f, indent=4)

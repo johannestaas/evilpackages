@@ -27,7 +27,7 @@ def main():
         help='output path, default: %(default)s',
     )
     subparser.add_argument(
-        '--batch-size', '-b', type=int, default=1000,
+        '--batch-size', '-b', type=int, default=100,
         help='number of concurrent requests, default: %(default)s',
     )
     args = parser.parse_args()
