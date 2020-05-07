@@ -14,6 +14,15 @@ LOG = logging.getLogger('evilpackages')
 RE_PACKAGE_NAME = re.compile(r'/simple/([^/]+)')
 
 
+def pypi_etiquette(*args, **kwargs):
+    raise NotImplementedError('pypi considers this rude')
+
+
+requests.get = pypi_etiquette
+grequests.get = pypi_etiquette
+grequests.map = pypi_etiquette
+
+
 def get_package_list():
     LOG.info('getting package list...')
     packages = []
